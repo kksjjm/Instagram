@@ -2,7 +2,6 @@ from django.db import models
 from common.models import CommonModel, Product
 
 
-""" ROOM Model Definition """
 class Room(Product):
     # choices
     class RoomKindChoices(models.TextChoices):
@@ -22,6 +21,10 @@ class Room(Product):
     amenities = models.ManyToManyField(
         "rooms.Amenity",
     )
+
+    # ORM
+    def total_amenities(self):
+        return self.amenities.count()
 
 class Amenity(CommonModel):
     class Meta:

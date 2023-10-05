@@ -29,6 +29,9 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+OTHER_APPS = [
+    "rest_framework",
+]
 
 CUSTOM_APPS = [
     # "houses.apps.HousesConfig",
@@ -53,7 +56,7 @@ SYSTEM_APPS = [
     "django.contrib.staticfiles"
 ]
 
-INSTALLED_APPS = CUSTOM_APPS + SYSTEM_APPS
+INSTALLED_APPS = CUSTOM_APPS + SYSTEM_APPS + OTHER_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
