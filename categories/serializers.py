@@ -6,7 +6,10 @@ class CategorySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Category
-        fields = "__all__" # 전부 보여주기 
+        fields = (
+            "name",
+            "kind",
+        ) # 전부 보여주기 
         # exclude = ("updated_at", ) # "pk, udpated_at 빼고 보여주기"
 
 # # -------------- legacy --------------

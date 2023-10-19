@@ -55,6 +55,10 @@ class Product(CommonModel):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    # reviews = models.ManyToManyField(
+    #     "reviews.Review",
+    #     blank=True,
+    # )
     start_time = models.TimeField()
     end_time = models.TimeField()
 
@@ -74,7 +78,7 @@ class UserAct(CommonModel):
     user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
-        #related_name="", 이걸통해서 reverse accessor의 이름을 커스터마이징 할 수 있음
+        #related_name="reviews", 이걸통해서 reverse accessor의 이름을 커스터마이징 할 수 있음
     )
     room = models.ForeignKey(
         "rooms.Room",

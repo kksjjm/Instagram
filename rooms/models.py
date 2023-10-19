@@ -9,7 +9,6 @@ class Room(Product):
         PRIVATE_ROOM = ("private_room", "Private Room") 
         SHARED_ROOM = ("shared room", "Shared Room")
 
-    rooms = models.PositiveIntegerField()
     toilets = models.PositiveIntegerField()
     pet_friendly = models.BooleanField(
         default = True,
@@ -25,6 +24,16 @@ class Room(Product):
     # ORM
     def total_amenities(self):
         return self.amenities.count()
+    
+    def rating(room):
+        count = room.review_set.count()
+        if count == 0:
+            return "No Reviews"
+        else:
+            total_rating = 0
+            for review in room.review_set.all().values("rating"):
+                total_rating += review["rating"]
+            return round(total_rating/count, 2)
 
 class Amenity(CommonModel):
     class Meta:
