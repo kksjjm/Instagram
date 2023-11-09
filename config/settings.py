@@ -141,6 +141,12 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 # AUTH 
 AUTH_USER_MODEL = "users.user"
+
+# MEDIA  
+MEDIA_ROOT = "uploads" # where media files be saved
+MEDIA_URL = "user-uploads/" # media root와 다를 수 있다!
+
+# other values
+PAGE_SIZE = 4

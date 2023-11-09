@@ -9,6 +9,7 @@ from categories.models import Category
 from .serializers import AmenitySerializer, RoomListSerializer, RoomDetailSerializer
 from reviews.serializers import ReviewSerializer
 # from medias.serializers import PhotoSerializer
+from django.conf import settings
 
 class Amenities(APIView):
     def get(self, request):
@@ -177,7 +178,7 @@ class RoomAmenities(APIView):
             page = int(request.query_params.get("page", 1))
         except ValueError:
             page = 1
-        page_size = 3
+        page_size = settings.PAGE_SIZE
         start = (page-1)*page_size
         end = page*page_size
         serializer = AmenitySerializer(
