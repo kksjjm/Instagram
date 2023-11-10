@@ -5,9 +5,11 @@ class Wishlist(CommonModel):
     
     rooms = models.ManyToManyField(
         "rooms.Room",
+        blank=True,
     )
     experiences = models.ManyToManyField(
         "experiences.Experience",
+        blank=True,
     )
     user = models.ForeignKey(
         "users.User",

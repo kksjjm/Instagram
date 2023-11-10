@@ -3,6 +3,7 @@ from .models import Amenity, Room
 from users.serializers import HostUserSerializer
 from categories.serializers import CategorySerializer
 from reviews.serializers import ReviewSerializer
+from medias.serializers import PhotoSerializer
 
 class AmenitySerializer(ModelSerializer):
     class Meta:
@@ -16,7 +17,8 @@ class RoomListSerializer(ModelSerializer):
     rating = SerializerMethodField()
     is_host = SerializerMethodField()
     review_set = ReviewSerializer(many=True, read_only=True)
-    
+    photo_set = PhotoSerializer(many=True, read_only=True)
+
     class Meta:
         model = Room
         fields = (
@@ -28,6 +30,7 @@ class RoomListSerializer(ModelSerializer):
             "rating",
             "is_host",
             "review_set",
+            "photo_set",
         )
     def get_rating(self, room): #format 지켜야함 
         return room.rating()
@@ -43,6 +46,7 @@ class RoomDetailSerializer(ModelSerializer):
     rating = SerializerMethodField()
     is_host = SerializerMethodField()
     review_set = ReviewSerializer(many=True, read_only=True)
+    photo_set = PhotoSerializer(many=True, read_only=True)
 
     class Meta:
         model = Room
