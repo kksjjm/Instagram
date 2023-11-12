@@ -12,7 +12,7 @@ from categories.models import Category
 from .serializers import AmenitySerializer, RoomListSerializer, RoomDetailSerializer
 from reviews.serializers import ReviewSerializer
 from medias.serializers import PhotoSerializer
-from bookings.serializers import BookingPublicSerilaizer
+from bookings.serializers import PublicBookingSerializer, CreateRoomBookingSerializer
 from django.conf import settings
 
 class Amenities(APIView):
@@ -99,7 +99,6 @@ class Rooms(APIView):
                 raise ParseError("Amenity is not found")
         else:
             return Response(serializer.errors) # error의 내용 반환 
-
 
 class RoomDetail(APIView):
 
@@ -249,13 +248,28 @@ class RoomBookings(APIView):
         booking = Booking.objects.filter(
             room=room,
             kind=Booking.KindChoices.ROOM,
-            check_in__gt=today #check_in greater than 
+            check_out__gt=today #check_in greater than today
             )
         # booking = Booking.objects.filter(room__pk=pk) #이렇게도 할 수 있음
-        serializer = BookingPublicSerilaizer(
+        serializer = PublicBookingSerializer(
             booking,
             many=True,
             )
         return Response(serializer.data)
-        
-        
+    
+    def post(self, request, pk):
+        room = self.get_room(pk)
+        serializer = CreateRoomBookingSerializer(
+            data=request.data,
+            )
+        if serializer.is_valid():
+            new_booking = serializer.save(
+                room=room,
+                user=request.user,
+                status=Booking.BookingStatusChoices.RESERVED,
+                kind=Booking.KindChoices.ROOM,
+            )
+            serializer = PublicBookingSerializer(new_booking)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
