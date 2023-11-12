@@ -4,12 +4,15 @@ from rest_framework.exceptions import NotFound, NotAuthenticated, ParseError, Pe
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db import transaction
+from django.utils import timezone 
 
 from .models import Amenity, Room
+from bookings.models import Booking
 from categories.models import Category
 from .serializers import AmenitySerializer, RoomListSerializer, RoomDetailSerializer
 from reviews.serializers import ReviewSerializer
 from medias.serializers import PhotoSerializer
+from bookings.serializers import BookingPublicSerilaizer
 from django.conf import settings
 
 class Amenities(APIView):
@@ -231,4 +234,28 @@ class RoomPhotos(APIView):
         else:
             return Response(serializer.errors)
         
-    
+class RoomBookings(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_room(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            return NotFound
+
+    def get(self, request, pk):
+        today = timezone.localtime(timezone.now()).date()
+        room = self.get_room(pk)
+        booking = Booking.objects.filter(
+            room=room,
+            kind=Booking.KindChoices.ROOM,
+            check_in__gt=today #check_in greater than 
+            )
+        # booking = Booking.objects.filter(room__pk=pk) #이렇게도 할 수 있음
+        serializer = BookingPublicSerilaizer(
+            booking,
+            many=True,
+            )
+        return Response(serializer.data)
+        
+        

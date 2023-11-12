@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.status import HTTP_200_OK
+from rooms.models import Room
 from .models import Wishlist
 from .serializers import WishlistSerializer
 
@@ -69,3 +70,30 @@ class WhishListsDetail(APIView):
         wishlist = self.get_object(pk, request.user)
         wishlist.delete()
         return Response(status=HTTP_200_OK)
+
+
+class WishListToggle(APIView):
+
+    def get_wishlist(self, pk, user):
+        try:
+            return Wishlist.objects.get(pk=pk, user=user)
+        except Wishlist.DoesNotExist:
+            raise NotFound
+
+    def get_room(self, room_pk):
+        try:
+            return Room.objects.get(pk=room_pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def put(self, request, pk, room_pk):
+        wishlist = self.get_wishlist(pk, request.user)
+        room = self.get_room(room_pk)
+        
+        # check the room in inside of wishlist
+        if wishlist.rooms.filter(pk=room.pk).exists():
+            wishlist.rooms.remove(room)
+        else:
+            wishlist.rooms.add(room)
+        return Response(status=HTTP_200_OK)
+
