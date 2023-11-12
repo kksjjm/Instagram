@@ -20,7 +20,6 @@ class RoomListSerializer(ModelSerializer):
     is_liked = SerializerMethodField()
     review_set = ReviewSerializer(many=True, read_only=True)
     photo_set = PhotoSerializer(many=True, read_only=True)
-
     class Meta:
         model = Room
         fields = (
