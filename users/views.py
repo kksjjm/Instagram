@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import authenticate, login, logout
 from .serializers import MyProfileSerializer, PublicUserSerializer
 from users.models import User
 
@@ -68,3 +69,27 @@ class ChangeUserPassword(APIView):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class UserLogIn(APIView):
+
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        if not username or not password:
+            raise ParseError
+        user = authenticate(
+            request=request,
+            username=username,
+            password=password,
+        )
+        if user is not None:
+            login(request, user)
+            return Response({"Log-In": "Wellcome!!"})
+        else:
+            return Response({"error": "Wrong Username or Password!!"})
+
+class UserLogOut(APIView):
+    def post(self, request):
+        logout(request)
+        return Response({"Log-Out":"See you!!"})
+
