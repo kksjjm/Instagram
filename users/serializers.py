@@ -1,14 +1,13 @@
 from rest_framework.serializers import ModelSerializer
 from .models import User
 
-class HostUserSerializer(ModelSerializer):
+class SimpleUserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = (
             "username",
             "avatar",
         )
-        
 class MyProfileSerializer(ModelSerializer):
     class Meta:
         model = User
@@ -22,4 +21,13 @@ class MyProfileSerializer(ModelSerializer):
             "is_active",
             "groups",
             "user_permissions",
+        )
+
+class PublicUserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "avatar",
+            "email",
         )

@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from .models import Amenity, Room
 from wishlists.models import Wishlist
-from users.serializers import HostUserSerializer
+from users.serializers import SimpleUserSerializer
 from categories.serializers import CategorySerializer
 from reviews.serializers import ReviewSerializer
 from medias.serializers import PhotoSerializer
@@ -54,7 +54,7 @@ class RoomListSerializer(ModelSerializer):
 
 class RoomDetailSerializer(ModelSerializer):
     
-    host = HostUserSerializer(read_only=True) #request로 부터 받지 않게 하기 위해 
+    host = SimpleUserSerializer(read_only=True) #request로 부터 받지 않게 하기 위해 
     amenities = AmenitySerializer(many=True, read_only=True) 
     category = CategorySerializer(read_only=True)
     rating = SerializerMethodField()
