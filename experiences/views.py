@@ -103,3 +103,24 @@ class ExperiencesDetail(APIView):
         experience.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
    
+class PerksInExp(APIView):
+    def get_experience(self, pk):
+        try:
+            return models.Experience.objects.get(pk=pk)
+        except models.Experience.DoesNotExist:
+            return NotFound
+        
+    def get(self, request, pk):
+        experience = self.get_experience(pk)
+        perks = experience.perks.all()
+        serializer = serializers.PerkSerializer(
+            perks,
+            many=True,
+        )
+        return Response(serializer.data)
+
+class BookingsInExp(APIView):
+    
+
+class BookingDetailInExp(APIView):
+    pass
