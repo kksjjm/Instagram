@@ -73,6 +73,7 @@ class Experiences(APIView):
             return Response(serializer.errors)
         
 class ExperiencesDetail(APIView):
+    permission_classes = [IsAuthenticated]
     def get_object(self, pk):
         try:
             return models.Experience.objects.get(pk=pk)
@@ -104,6 +105,7 @@ class ExperiencesDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
    
 class PerksInExp(APIView):
+    permission_classes = [IsAuthenticated]
     def get_experience(self, pk):
         try:
             return models.Experience.objects.get(pk=pk)
@@ -119,8 +121,9 @@ class PerksInExp(APIView):
         )
         return Response(serializer.data)
 
+
 class BookingsInExp(APIView):
-    
+    pass
 
 class BookingDetailInExp(APIView):
     pass
