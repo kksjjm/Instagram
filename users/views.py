@@ -53,7 +53,7 @@ class PublicUserProfile(APIView):
             raise NotFound
         serilaizer = PublicUserSerializer(user)
         return Response(serilaizer.data)
-    # 코드첼린지 => User에 딸린 집, 리뷰를 볼수 있게 해보기 
+    # 코드첼린지 => User에 딸린 집, Exp, 리뷰를 볼수 있게 해보기 
 
 class ChangeUserPassword(APIView):
 
