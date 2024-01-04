@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound, PermissionDenied
-from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rooms.models import Room
 from .models import Wishlist
 from .serializers import WishlistSerializer
@@ -30,7 +30,10 @@ class WhishLists(APIView):
             return Response(serializer.data)
             
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
 
 
 class WhishListsDetail(APIView):
@@ -64,7 +67,10 @@ class WhishListsDetail(APIView):
                                             context={"request":request},)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
 
     def delete(self, request, pk):
         wishlist = self.get_object(pk, request.user)

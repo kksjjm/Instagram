@@ -1,3 +1,5 @@
+import jwt
+from django.conf import settings 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ParseError
@@ -28,7 +30,10 @@ class MyProfile(APIView):
             serializer = MyProfileSerializer(new_me)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         
 class UserSignIn(APIView):
     def post(self, request):
@@ -43,7 +48,10 @@ class UserSignIn(APIView):
             serializer = MyProfileSerializer(user)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 class PublicUserProfile(APIView):
     def get(self, request, username):
@@ -93,3 +101,25 @@ class UserLogOut(APIView):
         logout(request)
         return Response({"Log-Out":"See you!!"})
 
+class JWTLogin(APIView):
+    
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        if not username or not password:
+            raise ParseError
+        user = authenticate(
+            request=request,
+            username=username,
+            password=password,
+        )
+        
+        if user:
+            token = jwt.encode(
+                {"pk":user.pk}, 
+                settings.SECRET_KEY,
+                algorithm="HS256",
+                )
+            return Response({"token": token})
+        else:
+            return Response ({"error": "wrong username or password"})

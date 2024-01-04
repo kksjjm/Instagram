@@ -19,7 +19,10 @@ class Perks(APIView):
             serializer = serializers.PerkSerializer(new_perk)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 class PerkDetail(APIView):
     def get_object(self, pk):
@@ -45,7 +48,10 @@ class PerkDetail(APIView):
             serializer = serializers.PerkSerializer(alter_perk)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
     
     def delete(self, request, pk):
         perk = self.get_object(pk)
@@ -70,7 +76,10 @@ class Experiences(APIView):
             serializer = serializers.ExpDetailSerializer(new_experience)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         
 class ExperiencesDetail(APIView):
     permission_classes = [IsAuthenticated]
@@ -97,7 +106,10 @@ class ExperiencesDetail(APIView):
             serializer = serializers.ExpDetailSerializer(new_exp)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
     
     def delete(self, request, pk):
         experience = self.get_object(pk)

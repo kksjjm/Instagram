@@ -1,7 +1,7 @@
 
 from .models import Category
 from rest_framework.response import Response
-from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from .serializers import CategorySerializer
@@ -18,7 +18,10 @@ class Categories(APIView):
             new_category = serializer.save() # call "create" method in CategorySerializer
             return Response(CategorySerializer(new_category).data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
 
 class CategoryDetail(APIView):
     def get_object(self, pk):
@@ -41,7 +44,10 @@ class CategoryDetail(APIView):
             updated_category = serializer.save() # call "update" method 
             return Response(CategorySerializer(updated_category).data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
 
     def delete(self, request, pk):
         self.get_object(pk).delete()

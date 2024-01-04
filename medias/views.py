@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound, PermissionDenied
-from rest_framework.status import HTTP_200_OK
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Photo
@@ -27,4 +27,4 @@ class PhotoDetail(APIView):
             raise PermissionDenied
         
         photo.delete()
-        return Response(status = HTTP_200_OK)
+        return Response(status = status.HTTP_200_OK)

@@ -17,7 +17,7 @@ class CommonModel(BasicModel):
     
     name = models.CharField(
         max_length=100,
-        default="",
+        # default="",
     )
     descriptions = models.TextField(
         null=True,

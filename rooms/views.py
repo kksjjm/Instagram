@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, NotAuthenticated, ParseError, PermissionDenied
-from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db import transaction
 from django.utils import timezone 
@@ -27,7 +27,10 @@ class Amenities(APIView):
             new_amenity = serializer.save()
             return Response(AmenitySerializer(new_amenity).data)
         else:
-            return Response(serializer.errors) # error의 내용 반환 
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            ) # error의 내용 반환 
 
 class AmenityDetail(APIView):
     def get_object(self, pk):
@@ -52,7 +55,10 @@ class AmenityDetail(APIView):
             alter_amenity = serializer.save()
             return Response(AmenitySerializer(alter_amenity).data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
     
     def delete(self, request, pk):
         amenity = self.get_object(pk)
@@ -98,7 +104,10 @@ class Rooms(APIView):
             except Exception:
                 raise ParseError("Amenity is not found")
         else:
-            return Response(serializer.errors) # error의 내용 반환 
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            ) # error의 내용 반환 
 
 class RoomDetail(APIView):
 
@@ -134,7 +143,10 @@ class RoomDetail(APIView):
             alter_room = serializer.save()
             return Response(RoomDetailSerializer(alter_room).data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
     
     def delete(self, request, pk):
         room = self.get_object(pk)
@@ -231,7 +243,10 @@ class RoomPhotos(APIView):
             serializer = PhotoSerializer(photo)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
         
 class RoomBookings(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -272,4 +287,7 @@ class RoomBookings(APIView):
             serializer = PublicBookingSerializer(new_booking)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
